@@ -57,3 +57,46 @@
 	}
 })();
 
+(function() { 'use strict';
+	angular
+		.module('kindly')
+		.controller('SearchCtrl', SearchCtrl);
+
+	SearchCtrl.$inject = ['MusicAPI', '$scope'];
+
+	function SearchCtrl(MusicAPI, $scope) {
+		var vm = this;
+		vm.bands = [];
+		vm.bandName = '';
+
+		activate();
+
+		$scope.$watch(
+			function(){return vm.bandName;},
+			function(newVal, oldVal) {
+				if(newVal !== oldVal) {
+					searchBands(newVal);
+				}
+		});
+
+		function activate() {
+			return getLatestBands();
+		}
+
+		function getLatestBands() {
+			return MusicAPI.getLatestBands()
+				.then(function (result) {
+					vm.bands = result.data;
+					return vm.bands;
+			});
+		}
+		
+		function searchBands(bandName) {
+			return MusicAPI.searchBands(bandName)
+				.then(function(result) {
+					vm.bands = result.data;
+					return vm.bands;
+			})
+		}
+	}
+})();
