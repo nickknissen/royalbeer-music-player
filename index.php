@@ -11,6 +11,7 @@
 	<link rel="stylesheet" href="/css/main.css">
 
 	<script src="/bower_components/angular/angular.min.js"></script>
+	<script src="/bower_components/angular-soundmanager2/dist/angular-soundmanager2.min.js"></script>
 	<script src="/js/app.js"></script>
 </head>
 <body>
@@ -38,6 +39,10 @@
 						<img class="img-circle list-cover-art" ng-src="{{::band.featured_images['small-square'][0]}}"><span ng-bind="::band.title"></span>
 					</li>
 				</ul>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12" ng-controller="PlayCtrl as playCtrl">
 			</div>
 		</div>
 	</main>

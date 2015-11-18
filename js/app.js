@@ -100,3 +100,20 @@
 		}
 	}
 })();
+
+(function() { 'use strict';
+	angular
+		.module('kindly')
+		.controller('PlayCtrl', PlayCtrl);
+
+	PlayCtrl.$inject = ['MusicAPI'];
+
+	function PlayCtrl(MusicAPI, $scope) {
+		var vm = this;
+
+		activate();
+
+		function activate() { }
+
+	}
+})();
