@@ -1,7 +1,7 @@
 //(function (){})();
 (function() { 'use strict';
 	angular
-		.module('kindly', []);
+		.module('kindly', ['angularSoundManager'])
 })();
 
 (function() { 'use strict';
@@ -68,6 +68,17 @@
 		var vm = this;
 		vm.bands = [];
 		vm.bandName = '';
+		vm.toggleBandTracks = function (band) {
+			if(band.tracks !== undefined && band.tracks.length > 0) {
+				band.tracks = undefined; 
+				return;
+			}
+			return MusicAPI.getBandTracks(band.ID)
+				.then(function(result) {
+					band.tracks = result.data;
+					return band.tracks;
+			});
+		};
 
 		activate();
 
@@ -96,24 +107,7 @@
 				.then(function(result) {
 					vm.bands = result.data;
 					return vm.bands;
-			})
+			});
 		}
-	}
-})();
-
-(function() { 'use strict';
-	angular
-		.module('kindly')
-		.controller('PlayCtrl', PlayCtrl);
-
-	PlayCtrl.$inject = ['MusicAPI'];
-
-	function PlayCtrl(MusicAPI, $scope) {
-		var vm = this;
-
-		activate();
-
-		function activate() { }
-
 	}
 })();

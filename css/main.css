@@ -1,3 +1,4 @@
+
 .list-group-item:hover {
 	color: #555;
 	background-color: #f5f5f5;
@@ -8,4 +9,12 @@
 	width: 40px;
 	height: 40px;
 	padding-right: 5px;
+}
+
+.band-tracks {
+	padding-top: 15px;
+}
+
+.track-buttons {
+	float: right;
 }

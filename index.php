@@ -24,25 +24,56 @@
 				<input type="search" class="form-control input-lg" 
 							 placeholder="Search for band names" 
 							 ng-model="searchCtrl.bandName" 
-						   ng-model-options="{ debounce: 1000 }">
+							 ng-model-options="{ debounce: 1000 }">
 				<ul class="list-group">
 					<li class="list-group-item" ng-repeat="band in searchCtrl.bands">
-						<img class="img-circle list-cover-art" ng-src="{{::band.featured_images['medium-square'][0]}}"><span ng-bind="::band.title"></span>
+						<div class="band-info" ng-click="searchCtrl.toggleBandTracks(band)">
+							<img class="img-circle list-cover-art" ng-src="{{::band.featured_images['medium-square'][0]}}"><span ng-bind="::band.title"></span>
+						</div>
+						<ul class="band-tracks list-group" ng-show="band.tracks">
+							<li class="list-group-item" ng-repeat="track in band.tracks">
+								<span ng-bind="::track.title"></span>
+								<span class="track-buttons">
+									<button music-player="play" add-song="track" class="btn btn-info btn-xs glyphicon glyphicon-play"></button>
+									<button music-player add-song="track" class="btn btn-info btn-xs glyphicon glyphicon-plus"></button>
+								</span>
+							</li>
+						</ul>
 					</li>
 					<li class="list-group-item" ng-show="searchCtrl.bands.length == 0">No bands found.</li>
 				</ul>
 			</div>
-			<div class="col-md-3 top-bands" ng-controller="TopBandCtrl as topBandCtrl">
-				<h3>Top 5 bands</h3>
-				<ul class="list-group">
-					<li class="list-group-item" ng-repeat="band in ::topBandCtrl.topBands">
-						<img class="img-circle list-cover-art" ng-src="{{::band.featured_images['small-square'][0]}}"><span ng-bind="::band.title"></span>
+			<div class="col-md-3">
+				<sound-manager></sound-manager>
+				<h3>Play music</h3>
+				<div class="btn-group btn-group-justified">
+					<div class="btn-group">
+						<button prev-track class="btn btn-info glyphicon glyphicon-step-backward"></button>
+					</div>
+					<div class="btn-group">
+						<button play-pause-toggle 
+							class="btn btn-info glyphicon glyphicon-play" 
+							ng-class="{'glyphicon-pause': isPlaying}" 
+							data-play="" 
+							data-pause=""></button>
+					</div>
+					<div class="btn-group">
+						<button next-track class="btn btn-info glyphicon glyphicon-step-forward"></button>
+					</div>
+				</div>
+				<img ng-src="{{currentPlaying.featured_images['small-square'][0]}}" style="width: 100%"/>
+				<div class="btn-group btn-group-justified" role="group" aria-label="...">
+				<div class="progress">
+					<div class="progress-bar" ng-style="{width : ( progress + '%' ) }"></div>
+				</div>
+				<ul class="band-tracks list-group">
+					<li class="list-group-item" ng-repeat="track in playlist" ng-class="{'active': currentPlaying.id == track.id}" play-from-playlist="track" >
+						<span ng-bind="::track.title"></span>
+						<span class="track-buttons">
+							<a remove-from-playlist="track" data-index="{$index}" class="btn btn-info btn-xs glyphicon glyphicon-trash"></a>
+						</span>
 					</li>
 				</ul>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-12" ng-controller="PlayCtrl as playCtrl">
 			</div>
 		</div>
 	</main>
