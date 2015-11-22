@@ -25,6 +25,9 @@
 			},
 			getBandTracks: function(bandId) {
 				return $http.get('/proxy.php??action=kindly_api_media_get_tracks_by_band&band=' + bandId);
+			},
+			getTracks: function(trackIds) {
+				return $http.get('get_tracks.php?id[]=' + trackIds.join("&id[]="));
 			}
 		};
 	}
