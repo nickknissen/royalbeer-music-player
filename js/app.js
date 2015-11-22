@@ -1,7 +1,22 @@
 //(function (){})();
 (function() { 'use strict';
 	angular
-		.module('kindly', ['angularSoundManager'])
+		.module('kindly', ['angularSoundManager']);
+})();
+
+(function() { 'use strict';
+	angular
+		.module('kindly')
+		.config(config);
+
+	config.$inject = ['$locationProvider'];
+
+	function config($locationProvider) {
+		$locationProvider.html5Mode({
+			enabled: true,
+			requireBase: false
+		});
+	}
 })();
 
 (function() { 'use strict';
@@ -73,7 +88,7 @@
 		vm.bandName = '';
 		vm.toggleBandTracks = function (band) {
 			if(band.tracks !== undefined && band.tracks.length > 0) {
-				band.tracks = undefined; 
+				band.tracks = undefined;
 				return;
 			}
 			return MusicAPI.getBandTracks(band.ID)
@@ -104,13 +119,80 @@
 					return vm.bands;
 			});
 		}
-		
+
 		function searchBands(bandName) {
 			return MusicAPI.searchBands(bandName)
 				.then(function(result) {
 					vm.bands = result.data;
 					return vm.bands;
 			});
+		}
+	}
+})();
+
+(function() { 'use strict';
+	angular
+		.module('kindly')
+		.controller('PlayCtrl', PlayCtrl);
+
+	PlayCtrl.$inject = ['MusicAPI', '$location', 'angularPlayer'];
+
+	function PlayCtrl(MusicAPI, $location, angularPlayer) {
+		var vm = this;
+		vm.removeTrack = removeTrack;
+		vm.addTrackToPlaylist = addTrackToPlaylist;
+		vm.addAndPlayTrackPlaylist = addAndPlayTrackPlaylist;
+		vm.getCurrentUrl = getCurrentUrl;
+
+		activate();
+		
+		function getCurrentUrl() {
+			return $location.absUrl();
+		}
+
+		function getPlaylistIds() {
+			var playlistIds = $location.search().id;
+			if (playlistIds === undefined) {
+				return [];
+			}
+			return playlistIds.split(",");
+		}
+
+		function addTrackToPlaylist(track) {
+			var playlistIds = getPlaylistIds();
+			var index = playlistIds.indexOf(track.id.toString());
+			if (index === -1) {
+				playlistIds.push(track.id);
+			}
+			$location.search("id", playlistIds.toString());
+			angularPlayer.addTrack(track);
+		}
+
+		function removeTrack(track) {
+			var playlistIds = getPlaylistIds();
+			var index = playlistIds.indexOf(track.id.toString());
+			if (index > -1) {
+				playlistIds.splice(index, 1);
+			}
+			$location.search("id", playlistIds.toString());
+			angularPlayer.removeSong(track);
+		}
+
+		function addAndPlayTrackPlaylist(track) {
+			addTrackToPlaylist(track);
+			angularPlayer.playTrack(track);
+
+		}
+
+		function activate() { 
+			var playlistIds = getPlaylistIds();
+
+			MusicAPI.getTracks(playlistIds).then(function (result) {
+				result.data.forEach(function(track) {
+					angularPlayer.addTrack(track);
+				});
+			});
+		
 		}
 	}
 })();

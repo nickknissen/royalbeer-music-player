@@ -16,7 +16,7 @@
 </head>
 <body>
 	<header></header>
-	<main class="container">
+	<main class="container" ng-controller="PlayCtrl as playCtrl">
 		<h1>Royalbeer Music Player</h1>
 		<div class="row">
 			<div class="col-md-8" ng-controller="SearchCtrl as searchCtrl">
@@ -34,8 +34,8 @@
 							<li class="list-group-item" ng-repeat="track in band.tracks">
 								<span ng-bind="::track.title"></span>
 								<span class="track-buttons">
-									<button music-player="play" add-song="track" class="btn btn-info btn-xs glyphicon glyphicon-play"></button>
-									<button music-player add-song="track" class="btn btn-info btn-xs glyphicon glyphicon-plus"></button>
+									<button ng-click="playCtrl.addAndPlayTrackPlaylist(track)" class="btn btn-info btn-xs glyphicon glyphicon-play"></button>
+									<button ng-click="playCtrl.addTrackToPlaylist(track)" class="btn btn-info btn-xs glyphicon glyphicon-plus"></button>
 								</span>
 							</li>
 						</ul>
@@ -70,10 +70,13 @@
 					<li class="list-group-item" ng-repeat="track in playlist" ng-class="{'active': currentPlaying.id == track.id}" play-from-playlist="track" >
 						<span ng-bind="::track.title"></span>
 						<span class="track-buttons">
-							<a remove-from-playlist="track" data-index="{$index}" class="btn btn-info btn-xs glyphicon glyphicon-trash"></a>
+							<button ng-click="playCtrl.removeTrack(track)" class="btn btn-info btn-xs glyphicon glyphicon-trash"></button>
 						</span>
 					</li>
 				</ul>
+				<div>
+					<a class="btn btn-primary btn-lg btn-block" href="https://www.facebook.com/sharer/sharer.php?u={{playCtrl.getCurrentUrl()}}" target="_blank">Del playliste på Facebook</a>
+				</div>
 			</div>
 		</div>
 	</main>
