@@ -14,17 +14,17 @@
 	function MusicAPI($http) {
 		return {
 			getTopBands: function () {
-				return $http.get('/api.php?action=kindly_api_band_get_bands&order_by=plays_right_now&limit=5&context=top_chart');
+				return $http.get('/proxy.php?action=kindly_api_band_get_bands&order_by=plays_right_now&limit=5&context=top_chart');
 			},
 			searchBands: function (bandName) {
 				bandName = encodeURIComponent(bandName);
-				return $http.get('/api.php?action=kindly_api_band_get_bands&order_by=plays_right_now&order=DESC&limit=10&page=1&context=list&search=' + bandName);
+				return $http.get('/proxy.php?action=kindly_api_band_get_bands&order_by=plays_right_now&order=DESC&limit=10&page=1&context=list&search=' + bandName);
 			},
 			getLatestBands: function () {
-				return $http.get('/api.php?action=kindly_api_band_get_bands&order_by=id&order=DESC&limit=10&page=1&context=list');
+				return $http.get('/proxy.php?action=kindly_api_band_get_bands&order_by=id&order=DESC&limit=10&page=1&context=list');
 			},
 			getBandTracks: function(bandId) {
-				return $http.get('/api.php??action=kindly_api_media_get_tracks_by_band&band=' + bandId);
+				return $http.get('/proxy.php??action=kindly_api_media_get_tracks_by_band&band=' + bandId);
 			}
 		};
 	}
